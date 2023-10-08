@@ -10,10 +10,12 @@ import routes from './routes';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
-function App() {
+function App()
+{
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
@@ -21,11 +23,12 @@ function App() {
     <Loader />
   ) : (
     <>
-    <Toaster position='top-right' reverseOrder={false} containerClassName='overflow-auto'/>
-  
+      <Toaster position='top-right' reverseOrder={false} containerClassName='overflow-auto' />
+
       <Routes>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/oauth/signin/:state" element={<SignIn />} />
         <Route element={<DefaultLayout />}>
           <Route index element={<ECommerce />} />
           {routes.map(({ path, component: Component }) => (

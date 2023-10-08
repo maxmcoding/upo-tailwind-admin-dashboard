@@ -22,7 +22,7 @@ const coreRoutes = [
     component: Profile,
   },
   {
-    path: '/profile/:code/:state',
+    path: '/profile/:state',
     title: 'Profiles',
     component: Profile,
   },
