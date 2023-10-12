@@ -22,6 +22,11 @@ const coreRoutes = [
     component: Profile,
   },
   {
+    path: '/profile/:state',
+    title: 'Profiles',
+    component: Profile,
+  },
+  {
     path: '/forms/form-elements',
     title: 'Forms Elements',
     component: FormElements,
