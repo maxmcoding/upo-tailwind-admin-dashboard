@@ -20,18 +20,19 @@ const AuthPage = () =>
 
   const handleSubmit = useEffect(() =>
   {
-    
-    const TransitionToken = Cookies.get(   config.oauth.transition_token_coockies_name    );
 
-    console.warn("params", params , TransitionToken ,  config.oauth.transition_token_coockies_name );
+    const TransitionToken = Cookies.get(config.oauth.transition_token_coockies_name);
 
-    const requestId =  btoa(  params.code+":" + TransitionToken );  
+    console.warn("params", params, TransitionToken, config.oauth.transition_token_coockies_name);
 
-    axios.get(`${config.oauth.token_url}`,{ data: { id: requestId } })
-    .then((res) =>{
-      console.warn("response Tokens", res);
-      // window.location.href = config.apps_client.main_webapp_url;
-    })
+    const requestId = btoa(params.code + ":" + TransitionToken);
+
+    axios.get(`${config.oauth.token_url}`, { data: { id: requestId } })
+      .then((res) =>
+      {
+        console.warn("response Tokens", res);
+        // window.location.href = config.apps_client.main_webapp_url;
+      })
 
   }, []);
 
@@ -62,7 +63,10 @@ const AuthPage = () =>
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <button className="mb-1.5 block font-medium" onClick={() => window.location.href = config.apps_client.main_webapp_url} > &#60; Back </button>
+              <button className="mb-1.5 block font-medium" onClick={() =>
+              {
+                // window.location.href = config.apps_client.main_webapp_url
+              }} > &#60; Back </button>
 
               <Loader />
 
