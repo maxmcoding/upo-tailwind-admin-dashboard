@@ -33,7 +33,7 @@ function App()
         <Route path="/" element={<SignIn />} />
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/oauth/signin/:state" element={<AuthPage />} />
+        <Route path="/oauth/signin/:code" element={<AuthPage />} />
         <Route element={<DefaultLayout />}>
           <Route element={<ECommerce />} />
 
