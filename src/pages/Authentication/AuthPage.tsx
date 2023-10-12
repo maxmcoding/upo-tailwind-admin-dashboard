@@ -3,13 +3,14 @@ import {  useParams  } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 import loginImg from '../../images/login/loginimg.svg';
+import Loader from '../../common/Loader';
 
 type  TransitionToken = {
   code?: string;
   state?: string;
 }
 
-const SignIn = () => {
+const AuthPage = () => {
   const params = useParams<TransitionToken>() ;
   console.warn( "params", params  );
   return (
@@ -171,4 +172,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default AuthPage;

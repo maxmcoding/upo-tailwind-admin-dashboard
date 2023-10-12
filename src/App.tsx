@@ -4,7 +4,9 @@ import { Toaster } from 'react-hot-toast';
 
 import ECommerce from './pages/Dashboard/ECommerce';
 import SignIn from './pages/Authentication/SignIn';
+import AuthPage from './pages/Authentication/AuthPage';
 import SignUp from './pages/Authentication/SignUp';
+import ErrorPage from './pages/ErrorPage';
 import Loader from './common/Loader';
 import routes from './routes';
 
@@ -25,12 +27,16 @@ function App()
     <>
       <Toaster position='top-right' reverseOrder={false} containerClassName='overflow-auto' />
 
-      <Routes>
+      <Routes> 
+        
+
+        <Route path="/" element={<SignIn />} />
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/oauth/signin/:state" element={<SignIn />} />
+        <Route path="/oauth/signin/:state" element={<AuthPage />} />
         <Route element={<DefaultLayout />}>
-          <Route index element={<ECommerce />} />
+          <Route element={<ECommerce />} />
+
           {routes.map(({ path, component: Component }) => (
             <Route
               path={path}
@@ -42,6 +48,7 @@ function App()
             />
           ))}
         </Route>
+        <Route path="*" element={<ErrorPage />}></Route>
       </Routes>
     </>
   );
