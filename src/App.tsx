@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import ECommerce from './pages/Dashboard/ECommerce';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
+import AuthPage from './pages/Authentication/AuthPage';
 import Loader from './common/Loader';
 import routes from './routes';
 
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/oauth/signin/:code" element={<AuthPage />} />
         <Route element={<DefaultLayout />}>
           <Route index element={<ECommerce />} />
           {routes.map((routes, index) => {
