@@ -1,17 +1,8 @@
-import {  useParams  } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumb';
 import CoverOne from '../images/cover/cover-01.png';
 import userSix from '../images/user/user-06.png';
 
-
-type  TransitionToken = {
-  code?: string;
-  state?: string;
-}
-
 const Profile = () => {
-  const params = useParams<TransitionToken>() ;
-  console.warn( "params", params  );
   return (
     <>
       <Breadcrumb pageName="Profile" />
