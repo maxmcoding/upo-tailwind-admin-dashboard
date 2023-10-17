@@ -1,8 +1,36 @@
 import { Link } from 'react-router-dom';
+
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 
-const SignIn = () => {
+import type { RootState } from '../../redux/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { setTokens } from '../../redux/slices/account/session'
+
+
+
+const SignIn = () =>
+{
+  const session = useSelector((state: RootState) => state.session)
+  const dispatch = useDispatch()
+
+  setTimeout(() =>
+  {
+    console.log('session setTokens dispatch', session)
+    // dispatch(setTokens({
+    //   access_token: session.access_token,
+    //   id_token: session.id_token,
+    //   refresh_token: session.refresh_token,
+    //   token_type: session.token_type,
+    //   expires_in: session.expires_in,
+    //   expire_unix: Date.now() + session.expires_in
+    // }))
+  }, 2000);
+
+
+
+
+
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

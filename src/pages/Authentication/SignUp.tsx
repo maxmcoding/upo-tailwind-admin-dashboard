@@ -1,8 +1,21 @@
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import type { RootState } from '../../redux/store'
+import { setTokens  } from '../../redux/slices/account/session'
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 
+
+
 const SignUp = () => {
+  const session = useSelector((state: RootState) => state.session   )
+  const dispatch = useDispatch()
+
+  // dispatch( setTokens({} as session ) )
+
+  console.log('session', session)
+
+
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

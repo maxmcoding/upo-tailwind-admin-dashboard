@@ -1,47 +1,50 @@
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { useCallback, useEffect } from "react"
+import { useParams, Navigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, memo } from "react"
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 import loginImg from '../../images/login/loginimg.svg';
 import Loader from '../../common/Loader';
 import config from '../../../config';
 import axios from 'axios';
-import Cookies from 'js-cookie'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { setTokens, Session } from '../../redux/slices/account/session'
 
 type TransitionToken = {
   code: string;
   // state?: string;
 }
 
+
+
+
 const AuthPage = () =>
 {
+  const dispatch = useDispatch()
   const params = useParams<TransitionToken>();
+  const decodeTransitionToken = useMemo(() => decodeURI(params.code || ""), [params.code]);
+  console.warn("AuthPage Start", decodeTransitionToken);
 
-  const handleSubmit = useEffect(() =>
+  useEffect(() =>
   {
-    const decodeTransitionToken = decodeURI( params.code || "" )
-    const transactionCode = Cookies.get(config.oauth.transition_token_coockies_name);
+    // const transactionCode = Cookies.get(config.oauth.transition_token_coockies_name);
+    console.warn("params", decodeTransitionToken);
+    // const requestId = btoa(decodeTransitionToken + ":" + transactionCode);
 
-    console.warn("params", decodeTransitionToken , transactionCode, config.oauth.transition_token_coockies_name);
-
-    const requestId = btoa(  decodeURI( decodeTransitionToken ) + ":" + transactionCode);
-
-    // axios.get(`${config.oauth.token_url}`, { data:   { id: requestId }     })
-    // axios({
-    //   method: 'post',
-    //   url: '/user/12345',
-    //   data: {
-    //     firstName: 'Fred',
-    //     lastName: 'Flintstone'
-    //   }
-    // })
-
-    axios.post(`${config.oauth.token_url}`, { id: requestId }   ,  {headers:{ "Access-Control-Allow-Origin":"*" }}   )
+    axios.post<Session>(`${config.oauth.token_url}`, { id: decodeTransitionToken })
       .then((res) =>
       {
         console.warn("response Tokens", res);
-        // window.location.href = config.apps_client.main_webapp_url;
+        dispatch(setTokens({
+          access_token: res.data.access_token,
+          id_token: res.data.id_token,
+          refresh_token: res.data.refresh_token,
+          token_type: res.data.token_type,
+          expires_in: res.data.expires_in,
+          expire_unix: Date.now() + res.data.expires_in
+        }))
+
       })
       .catch((err) =>
       {
@@ -49,6 +52,7 @@ const AuthPage = () =>
       });
 
   }, []);
+
 
 
 
@@ -93,4 +97,4 @@ const AuthPage = () =>
   );
 };
 
-export default AuthPage;
+export default memo(AuthPage);
