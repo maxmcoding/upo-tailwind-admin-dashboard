@@ -9,5 +9,7 @@ export default {
   },
   apps_client: {
     main_webapp_url: import.meta.env.VITE_MAIN_WEBPAGE_URL,
+    main_app_url: import.meta.env.VITE_MAIN_APP_URL,
+    
   },
 };

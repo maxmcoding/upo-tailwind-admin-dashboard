@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, redirect } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, memo } from "react"
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
@@ -8,8 +8,11 @@ import Loader from '../../common/Loader';
 import config from '../../../config';
 import axios from 'axios';
 
-import { useSelector, useDispatch } from 'react-redux'
+import type { RootState } from '../../redux/store'
+import { useSelector, useDispatch, connect } from 'react-redux'
 import { setTokens, Session } from '../../redux/slices/account/session'
+import ValidateAuth from '../../routes/validators/ValidateAuth';
+
 
 type TransitionToken = {
   code: string;
@@ -19,12 +22,25 @@ type TransitionToken = {
 
 
 
-const AuthPage = () =>
+const AuthPage = (props: { SESSION: Session }) =>
 {
   const dispatch = useDispatch()
   const params = useParams<TransitionToken>();
   const decodeTransitionToken = useMemo(() => decodeURI(params.code || ""), [params.code]);
-  console.warn("AuthPage Start", decodeTransitionToken);
+  const session = useSelector((state: RootState) => state.session)
+
+
+
+  console.warn("AuthPage Start", session);
+
+
+  if (ValidateAuth( session ))
+  {
+    console.warn("AuthPage Ya Existe  hay session")
+    return (<Navigate to="/" replace={true} />);
+  }
+
+
 
   useEffect(() =>
   {
@@ -32,23 +48,34 @@ const AuthPage = () =>
     console.warn("params", decodeTransitionToken);
     // const requestId = btoa(decodeTransitionToken + ":" + transactionCode);
 
-    axios.post<Session>(`${config.oauth.token_url}`, { id: decodeTransitionToken })
-      .then((res) =>
+    axios.post(`${config.oauth.token_url}`, { id: decodeTransitionToken })
+      .then((response) =>
       {
-        console.warn("response Tokens", res);
+        if (!response.data)
+        {
+          console.warn("error Tokens", response);
+          window.location.replace(config.apps_client.main_webapp_url);
+          return
+        }
+        const responseFormatted = JSON.parse(response.data) as Session;
+
+        console.warn("response Tokens", responseFormatted);
         dispatch(setTokens({
-          access_token: res.data.access_token,
-          id_token: res.data.id_token,
-          refresh_token: res.data.refresh_token,
-          token_type: res.data.token_type,
-          expires_in: res.data.expires_in,
-          expire_unix: Date.now() + res.data.expires_in
+          access_token: responseFormatted.access_token,
+          id_token: responseFormatted.id_token,
+          refresh_token: responseFormatted.refresh_token,
+          token_type: responseFormatted.token_type,
+          expires_in: responseFormatted.expires_in,
+          expire_unix: Date.now() + (responseFormatted.expires_in * 1000)
         }))
+
+        redirect("/profile")
 
       })
       .catch((err) =>
       {
         console.warn("error Tokens", err);
+        window.location.replace(config.apps_client.main_webapp_url);
       });
 
   }, []);
@@ -68,8 +95,12 @@ const AuthPage = () =>
               </Link>
 
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                Estamos Cargando tus datos, por favor espera un momento, si no eres redirigido en 5 segundos, haz click en el boton de abajo.
+                <button className="mb-1.5 block font-medium" onClick={() =>
+                {
+                  window.location.replace(config.apps_client.main_app_url);
+                }} > Ir a Panel
+                </button>
               </p>
 
               <span className="mt-15 inline-block">
@@ -83,6 +114,9 @@ const AuthPage = () =>
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <button className="mb-1.5 block font-medium" onClick={() =>
               {
+                console.log("redirect", config.apps_client.main_webapp_url)
+                // redirect(config.apps_client.main_webapp_url)
+                window.location.replace(config.apps_client.main_webapp_url);
                 // window.location.href = config.apps_client.main_webapp_url
               }} > &#60; Back </button>
 
@@ -97,4 +131,11 @@ const AuthPage = () =>
   );
 };
 
-export default memo(AuthPage);
+
+function mapStateToProps(state: RootState)
+{
+  return {
+    SESSION: state.session,
+  }
+}
+export default connect(mapStateToProps, null)(AuthPage);
