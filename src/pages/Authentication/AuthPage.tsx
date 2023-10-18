@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useParams, Navigate, redirect } from 'react-router-dom';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, memo } from "react"
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
@@ -28,38 +28,34 @@ const AuthPage = (props: { SESSION: Session }) =>
   const params = useParams<TransitionToken>();
   const decodeTransitionToken = useMemo(() => decodeURI(params.code || ""), [params.code]);
   const session = useSelector((state: RootState) => state.session)
+  const navigate = useNavigate();
 
 
-
-  console.warn("AuthPage Start", session);
-
-
-  if (ValidateAuth( session ))
-  {
-    console.warn("AuthPage Ya Existe  hay session")
-    return (<Navigate to="/" replace={true} />);
-  }
-
+  // console.log("AuthPage Start", session);
 
 
   useEffect(() =>
   {
     // const transactionCode = Cookies.get(config.oauth.transition_token_coockies_name);
-    console.warn("params", decodeTransitionToken);
-    // const requestId = btoa(decodeTransitionToken + ":" + transactionCode);
+    // console.log("useEffect params", decodeTransitionToken);
+    if (ValidateAuth(session))
+    {
+      // console.log("useEffect Ya Existe  hay session")
+      return;
+    }
 
     axios.post(`${config.oauth.token_url}`, { id: decodeTransitionToken })
       .then((response) =>
       {
         if (!response.data)
         {
-          console.warn("error Tokens", response);
-          window.location.replace(config.apps_client.main_webapp_url);
+          console.error("error Tokens", response);
+          navigate("/auth/signin");
           return
         }
         const responseFormatted = JSON.parse(response.data) as Session;
 
-        console.warn("response Tokens", responseFormatted);
+        // console.log("response Tokens", responseFormatted);
         dispatch(setTokens({
           access_token: responseFormatted.access_token,
           id_token: responseFormatted.id_token,
@@ -69,7 +65,7 @@ const AuthPage = (props: { SESSION: Session }) =>
           expire_unix: Date.now() + (responseFormatted.expires_in * 1000)
         }))
 
-        redirect("/profile")
+        // redirect("/profile")
 
       })
       .catch((err) =>
@@ -82,6 +78,23 @@ const AuthPage = (props: { SESSION: Session }) =>
 
 
 
+
+
+  // if (ValidateAuth(session))
+  // {
+  //   console.log("AuthPage Ya Existe  hay session")
+  //   setTimeout(() => {
+  //     navigate("/profile");
+  //   }, 1000);
+
+  //   // return (<Navigate to="/"   />);
+  // }
+
+  if (ValidateAuth(session))
+  {
+    console.log("AuthPage Ya Existe  hay session")    
+    return (<Navigate to="/"   />);
+  }
 
   return (
     <>

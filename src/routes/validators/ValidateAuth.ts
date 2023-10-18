@@ -12,7 +12,9 @@ export default  function ValidateAuth(SESSION: Session )
   const currentTime = session.expire_unix < Date.now() ;
   if ( currentTime )
   {
+    console.warn("ValidateAuth fnc ERROR "  , SESSION )
     return false
   }
+  console.log("ValidateAuth fnc OK"   )
   return true
 }
