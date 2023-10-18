@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import session from 'redux-persist/lib/storage/session';
+import jwtDecode from 'jwt-decode';
 
 export type Session = {
   id_token: string;
@@ -8,6 +8,23 @@ export type Session = {
   token_type: string;
   expires_in: number;
   expire_unix: number;
+  data_info?: SessionData;
+};
+
+export type SessionData = {
+  sub: string;
+  iss: string;
+  version: number;
+  client_id: string;
+  origin_jti: string;
+  event_id: string;
+  token_use: 'access' | 'id' | 'refresh';
+  scope: string;
+  auth_time: number;
+  exp: number;
+  iat: number;
+  jti: string;
+  username: string;
 };
 
 const initialState: Session = {
@@ -30,6 +47,7 @@ const sessionTokensSlice = createSlice({
       state.token_type = action.payload.token_type;
       state.expires_in = action.payload.expires_in;
       state.expire_unix = action.payload.expire_unix;
+      state.data_info =    jwtDecode<SessionData>(action.payload.access_token);
     },
   },
 });

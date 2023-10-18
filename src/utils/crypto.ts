@@ -2,7 +2,7 @@
 /// ///////////////////////////////////////
 // generate random text for identification
 /// ////////////////////////////////////////
-const makeid =  (length) => {
+const makeid =  (length: number) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -17,9 +17,9 @@ const makeid =  (length) => {
 /// ///////////////////////////////////////
 // generate sha256 hash of a string
 /// ////////////////////////////////////////
-async function sha256(message) {
+async function sha256(message : string) {
   // encode as UTF-8
-  const msgBuffer = new TextEncoder('utf-8').encode(message);
+  const msgBuffer = new TextEncoder().encode(message);
   // hash the message
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   // convert ArrayBuffer to Array

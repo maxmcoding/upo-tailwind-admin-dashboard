@@ -36,11 +36,8 @@ const AuthPage = (props: { SESSION: Session }) =>
 
   useEffect(() =>
   {
-    // const transactionCode = Cookies.get(config.oauth.transition_token_coockies_name);
-    // console.log("useEffect params", decodeTransitionToken);
     if (ValidateAuth(session))
     {
-      // console.log("useEffect Ya Existe  hay session")
       return;
     }
 
@@ -55,7 +52,7 @@ const AuthPage = (props: { SESSION: Session }) =>
         }
         const responseFormatted = JSON.parse(response.data) as Session;
 
-        // console.log("response Tokens", responseFormatted);
+        console.log("response Tokens", responseFormatted);
         dispatch(setTokens({
           access_token: responseFormatted.access_token,
           id_token: responseFormatted.id_token,
@@ -64,8 +61,6 @@ const AuthPage = (props: { SESSION: Session }) =>
           expires_in: responseFormatted.expires_in,
           expire_unix: Date.now() + (responseFormatted.expires_in * 1000)
         }))
-
-        // redirect("/profile")
 
       })
       .catch((err) =>
@@ -78,17 +73,6 @@ const AuthPage = (props: { SESSION: Session }) =>
 
 
 
-
-
-  // if (ValidateAuth(session))
-  // {
-  //   console.log("AuthPage Ya Existe  hay session")
-  //   setTimeout(() => {
-  //     navigate("/profile");
-  //   }, 1000);
-
-  //   // return (<Navigate to="/"   />);
-  // }
 
   if (ValidateAuth(session))
   {

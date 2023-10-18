@@ -5,7 +5,7 @@ import ValidateAuthMiddleware from './redux/middleware/ValidateAuth'
 import type { RootState } from './redux/store'
 import { Toaster } from 'react-hot-toast';
 import ECommerce from './pages/Dashboard/ECommerce';
-import SignIn from './pages/Authentication/SignIn';
+import SignIn from './pages/Authentication/SignInSimple';
 import SignUp from './pages/Authentication/SignUp';
 import AuthPage from './pages/Authentication/AuthPage';
 import Loader from './common/Loader';

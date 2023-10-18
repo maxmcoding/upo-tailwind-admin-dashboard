@@ -15,6 +15,6 @@ export default  function ValidateAuth(SESSION: Session )
     console.warn("ValidateAuth fnc ERROR "  , SESSION )
     return false
   }
-  console.log("ValidateAuth fnc OK"   )
+  // console.log("ValidateAuth fnc OK"   )
   return true
 }
