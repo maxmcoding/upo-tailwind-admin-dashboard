@@ -30,7 +30,8 @@ const SignIn = () =>
   }, 2000);
 
 
-
+  const oauthUrl =  `${ config.oauth.login_url }?response_type=code&client_id=${ config.oauth.client_id }&redirect_uri=${ encodeURI(config.oauth.login_callback_url )  }&state=${crypto.makeid(64)}`;
+  console.log("Start ", oauthUrl) 
 
 
   return (

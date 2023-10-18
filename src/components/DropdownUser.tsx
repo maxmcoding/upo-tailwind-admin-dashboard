@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import UserOne from '../images/user/user-01.png';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const session = useSelector((state: RootState) => state.session)
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -45,9 +47,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {session.data_info?.username}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          {/* <span className="block text-xs">UX Designer</span> */}
         </span>
 
         <span className="h-12 w-12 rounded-full">

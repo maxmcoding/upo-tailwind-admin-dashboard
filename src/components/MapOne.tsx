@@ -1,5 +1,7 @@
 import jsVectorMap from 'jsvectormap';
 import 'jsvectormap/dist/css/jsvectormap.css';
+// import 'jsvectormap/dist/maps/world-merc.js'
+import 'jsvectormap/dist/maps/world.js'
 import { useEffect } from 'react';
 import '../js/us-aea-en';
 
@@ -7,7 +9,7 @@ const MapOne = () => {
   useEffect(() => {
     const mapOne = new jsVectorMap({
       selector: '#mapOne',
-      map: 'us_aea_en',
+      map: 'world',
       zoomButtons: true,
 
       regionStyle: {
@@ -38,6 +40,8 @@ const MapOne = () => {
         },
       },
     });
+
+
   });
 
   return (
